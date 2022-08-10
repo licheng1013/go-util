@@ -6,14 +6,14 @@
 - Github安装
 - 无
 
-- 克隆到本地使用
+- Gitee安装
 - 以下是配置格式
 ```text
 require (
-	go-util v0.0.2
+	go-util v0.0.3
 )
 
-replace go-util => /home/lco/GolandProjects/go-util
+replace go-util => gitee.com/licheng1013/go-util v0.0.3
 ```
 
 ## Go-Util
