@@ -6,7 +6,6 @@ package util
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"strings"
 )
@@ -19,8 +18,6 @@ func GetIp() []string {
 		panic(err)
 	}
 	for _, item := range addr {
-		log.Println(item.String())
-
 		list = append(list, item.String())
 	}
 	return list
