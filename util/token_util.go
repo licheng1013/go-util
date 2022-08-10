@@ -24,7 +24,14 @@ func GetToken(id interface{}) string {
 	return t
 }
 
+// GetUserId  获取token解析，请使用 GetTokenParse 替代
+// Deprecated
 func GetUserId(t string) string {
+	return GetTokenParse(t)
+}
+
+// GetTokenParse 获取token解析
+func GetTokenParse(t string) string {
 	token, err := jwt.Parse(t, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})

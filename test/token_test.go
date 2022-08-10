@@ -12,5 +12,5 @@ import (
 func TestToken(t *testing.T) {
 	token := util.GetToken("12345")
 	t.Log(token)
-	t.Log(util.GetUserId(token))
+	t.Log(util.GetTokenParse(token))
 }
