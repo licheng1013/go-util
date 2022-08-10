@@ -5,7 +5,7 @@
 package test
 
 import (
-	"go-util/util"
+	"gitee.com/licheng1013/go-util/util"
 	"testing"
 )
 

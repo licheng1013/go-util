@@ -8,7 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	gourl "net/url"
+	goUrl "net/url"
 	"strings"
 	"time"
 )
@@ -30,7 +30,7 @@ func calcAuthorization(source string, secretId string, secretKey string) (auth s
 }
 
 func urlencode(params map[string]string) string {
-	var p = gourl.Values{}
+	var p = goUrl.Values{}
 	for k, v := range params {
 		p.Add(k, v)
 	}
