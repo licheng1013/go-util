@@ -26,14 +26,14 @@ func GetIp() []string {
 	return list
 }
 
-// GetTargetMaskIp 指定掩码 8 16 24 32   分割/ 192.168.16.100/24 =>  192.168.16.100
-func GetTargetMaskIp(str interface{}) []string {
-	str = fmt.Sprintf("%v", str)
+// GetTargetMaskIp 获取指定掩码位数的ip 8 16 24 32   分割/ 192.168.16.100/24 =>  192.168.16.100
+func GetTargetMaskIp(digit interface{}) []string {
+	digit = fmt.Sprintf("%v", digit)
 	var list []string
 	ip := GetIp()
 	for _, item := range ip {
 		split := strings.Split(item, "/")
-		if split[1] == str {
+		if split[1] == digit {
 			list = append(list, split[0])
 		}
 	}
