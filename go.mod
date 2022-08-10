@@ -1,4 +1,4 @@
-module github.com/licheng1013/go-util
+module gitee.com/licheng1013/go-util
 
 go 1.19
 
