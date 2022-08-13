@@ -12,23 +12,6 @@
 - v0.0.0 > v1.0.0 删除废弃的api 
 
 
-## 目前有以下工具
-
-- 工具用法网址暂未完成
-
-```text
-file_util.go
-gin_util.go
-ip_util.go
-json_util.go
-md5_util.go
-rsa_util.go
-tel_util.go
-time_util.go
-token_util.go
-url_util.go
-```
-
 ## 安装教程
 - Github安装
 - 无
@@ -43,4 +26,7 @@ require (
 replace go-util => gitee.com/licheng1013/go-util v0.0.4
 ```
 
+
+## file_util
+- 对文件进行的处理
 

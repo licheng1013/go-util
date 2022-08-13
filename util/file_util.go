@@ -14,7 +14,8 @@ import (
 
 var pathSeparator = string(os.PathSeparator)
 
-func ReadByte(file *os.File) []byte {
+// FileReadByte 读取文件
+func FileReadByte(file *os.File) []byte {
 	var data []byte
 	var bytes = make([]byte, 1024*8)
 	for {
@@ -46,16 +47,22 @@ func Mkdir(path string) {
 
 // GetFilePath 返回一个目录格式 /user/xx.txt => /user/
 func GetFilePath(path string) string {
-	index := strings.LastIndex(path, GetPathSeparator())
+	index := strings.LastIndex(path, FilePathSeparator())
 	if index == -1 {
 		panic("路径文件不对：" + path)
 	}
 	return path[:index]
 }
 
-// GetFilePathName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt
+// GetFilePathName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt 请使用 FilePathName
+// Deprecated
 func GetFilePathName(path string) string {
-	index := strings.LastIndex(path, GetPathSeparator())
+	return FilePathName(path)
+}
+
+// FilePathName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt
+func FilePathName(path string) string {
+	index := strings.LastIndex(path, FilePathSeparator())
 	if index == -1 {
 		return path
 	}
@@ -74,7 +81,7 @@ func ListFile(path string) []FileInfo {
 	for _, item := range dir {
 		f := FileInfo{FileName: item.Name(), IsDirectory: 0}
 		if item.IsDir() {
-			f.FileName += GetPathSeparator()
+			f.FileName += FilePathSeparator()
 			f.IsDirectory = 1
 		}
 		list = append(list, f)
@@ -119,7 +126,7 @@ func FileMerge(fileName, targetPath, timestamp, path string) {
 	//最终文件路径
 	var filePath = path + targetPath + fileName
 	//分块目录路径
-	blockPath := path + Md5Encode(fileName) + GetPathSeparator()
+	blockPath := path + Md5Encode(fileName) + FilePathSeparator()
 	Mkdir(filePath)
 	file := CreateFile(filePath)
 	files := ListFile(blockPath)
@@ -143,7 +150,13 @@ func FileMerge(fileName, targetPath, timestamp, path string) {
 	_ = os.Remove(blockPath)
 }
 
-// GetPathSeparator 获取系统路径分割符号 linux = / or win =\\
+// GetPathSeparator 获取系统路径分割符号 linux = / or win =\\ 请使用 FilePathSeparator
+// Deprecated
 func GetPathSeparator() string {
+	return FilePathSeparator()
+}
+
+// FilePathSeparator 获取系统路径分割符号 linux = / or win =\\
+func FilePathSeparator() string {
 	return pathSeparator
 }
