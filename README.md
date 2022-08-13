@@ -23,10 +23,10 @@
 - 以下是配置格式
 ```text
 require (
-	go-util v0.0.4
+	go-util v0.0.5
 )
 
-replace go-util => gitee.com/licheng1013/go-util v0.0.4
+replace go-util => gitee.com/licheng1013/go-util v0.0.5
 ```
 
 ## 工具类
