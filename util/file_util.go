@@ -32,9 +32,13 @@ func FileReadByte(file *os.File) []byte {
 	return bytes
 }
 
-// Mkdir 创建目录,会排除/user/xx.txt ,则创建user目录
+// Mkdir 创建目录,会排除/user/xx.txt ,则创建user目录 请使用： FileCreateDirectory
+// Deprecated
 func Mkdir(path string) {
-	path = GetFilePath(path)
+	FileCreateDirectory(path)
+}
+func FileCreateDirectory(path string) {
+	path = FileDirectoryPath(path)
 	//log.Println(path) //创建目录
 	err := os.Mkdir(path, 0750)
 	if os.IsExist(err) {
@@ -45,8 +49,14 @@ func Mkdir(path string) {
 	}
 }
 
-// GetFilePath 返回一个目录格式 /user/xx.txt => /user/
+// GetFilePath 返回一个目录格式 /user/xx.txt => /user/ 请使用：FileDirectoryPath
+// Deprecated
 func GetFilePath(path string) string {
+	return FileDirectoryPath(path)
+}
+
+// FileDirectoryPath 返回一个目录格式 /user/xx.txt => /user/
+func FileDirectoryPath(path string) string {
 	index := strings.LastIndex(path, FilePathSeparator())
 	if index == -1 {
 		panic("路径文件不对：" + path)
@@ -97,7 +107,7 @@ type FileInfo struct {
 }
 
 func CreateFile(path string) *os.File {
-	Mkdir(path)
+	FileCreateDirectory(path)
 	file := OpenFile(path)
 	defer file.Close()
 	return file
@@ -127,7 +137,7 @@ func FileMerge(fileName, targetPath, timestamp, path string) {
 	var filePath = path + targetPath + fileName
 	//分块目录路径
 	blockPath := path + Md5Encode(fileName) + FilePathSeparator()
-	Mkdir(filePath)
+	FileCreateDirectory(filePath)
 	file := CreateFile(filePath)
 	files := ListFile(blockPath)
 	for _, info := range files {
