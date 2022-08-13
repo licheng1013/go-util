@@ -1,7 +1,7 @@
 # go-util
 ## 介绍
 - 2022/8/8
-- 一个简单的util工具库
+- 一个简单的go-util工具库,简易封装一些api来使用。
 
 ## 版本变化
 - 小版本迭代
@@ -37,10 +37,10 @@ url_util.go
 - 以下是配置格式
 ```text
 require (
-	go-util v0.0.3
+	go-util v0.0.4
 )
 
-replace go-util => gitee.com/licheng1013/go-util v0.0.3
+replace go-util => gitee.com/licheng1013/go-util v0.0.4
 ```
 
 
