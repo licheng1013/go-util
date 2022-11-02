@@ -1,7 +1,3 @@
-/*
- * 作者：Lc
- */
-
 package test
 
 import (
