@@ -10,6 +10,10 @@ import (
 type IpUtil struct {
 }
 
+func NewIpUtil() *IpUtil {
+	return &IpUtil{}
+}
+
 // GetIp 获取ip 192.168.16.100/24
 func (v IpUtil) GetIp() []string {
 	var list []string

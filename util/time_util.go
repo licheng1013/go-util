@@ -1,9 +1,3 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
@@ -11,6 +5,14 @@ import (
 	"strconv"
 	"time"
 )
+
+// TimeUtil 时间工具类
+type TimeUtil struct {
+}
+
+func NewTimeUtil() *TimeUtil {
+	return &TimeUtil{}
+}
 
 // TimeFormat 格式必须如下1个字符也不要动！
 const TimeFormat = YearMonthDayDateTime
@@ -27,12 +29,12 @@ const EndTime = " 23:59:59"
 const StartTime = " 00:00:00"
 
 // ParseTimeStr 解析10位时间戳,返回格式好的日期格式 2006-01-02 15:04:05
-func ParseTimeStr(t interface{}) string {
-	return ParseTimeStrAndFormatStr(t, TimeFormat)
+func (timeUtil TimeUtil) ParseTimeStr(t interface{}) string {
+	return timeUtil.ParseTimeStrAndFormatStr(t, TimeFormat)
 }
 
 // ParseTime 解析10位时间戳,返回日期对象
-func ParseTime(t string) time.Time {
+func (timeUtil TimeUtil) ParseTime(t string) time.Time {
 	v, err := strconv.ParseInt(t, 10, 64)
 	if len(t) != 10 {
 		panic("不是10位时间戳！")
@@ -44,7 +46,7 @@ func ParseTime(t string) time.Time {
 }
 
 // ParseTimeStrAndFormatStr 解析10位时间戳
-func ParseTimeStrAndFormatStr(t interface{}, f string) string {
+func (timeUtil TimeUtil) ParseTimeStrAndFormatStr(t interface{}, f string) string {
 	str := fmt.Sprintf("%v", t)
 	parseInt, err := strconv.ParseInt(str, 10, 64)
 	if err != nil {
@@ -55,57 +57,57 @@ func ParseTimeStrAndFormatStr(t interface{}, f string) string {
 }
 
 // GetTodayTimestamp 获取当前时间10位时间戳,秒
-func GetTodayTimestamp() int64 {
+func (timeUtil TimeUtil) GetTodayTimestamp() int64 {
 	return time.Now().Unix()
 }
 
 // GetTodayMillisecondTimestamp 获取当前时间13位时间戳,毫秒
-func GetTodayMillisecondTimestamp() int64 {
+func (timeUtil TimeUtil) GetTodayMillisecondTimestamp() int64 {
 	return time.Now().UnixMilli()
 }
 
 // GetTodayDateTime 获取当前日期时间  2006-01-02 15:04:05
-func GetTodayDateTime() string {
+func (timeUtil TimeUtil) GetTodayDateTime() string {
 	return time.Now().Format(YearMonthDayDateTime)
 }
 
 // GetTodayDate 获取当前日期 2006-01-02
-func GetTodayDate() string {
+func (timeUtil TimeUtil) GetTodayDate() string {
 	return time.Now().Format(YearMonthDay)
 }
 
 // GetTodayStartDate 获取当前日期 2006-01-02 00:00:00
-func GetTodayStartDate() string {
+func (timeUtil TimeUtil) GetTodayStartDate() string {
 	return time.Now().Format(YearMonthDay) + StartTime
 }
 
 // GetTodayEndDate 获取当前日期 2006-01-02 23:59:59
-func GetTodayEndDate() string {
+func (timeUtil TimeUtil) GetTodayEndDate() string {
 	return time.Now().Format(YearMonthDay) + EndTime
 }
 
 // GetMonthStartDate 获取当前月开始日期 示例: 2006-02-12 => 2006-02-01
-func GetMonthStartDate() string {
+func (timeUtil TimeUtil) GetMonthStartDate() string {
 	now := time.Now()
 	now = now.AddDate(0, 0, -now.Day()+1)
 	return now.Format(YearMonthDay) + StartTime
 }
 
 // GetMonthEndDate 获取当前月结束日期 示例: 2006-02-12 => 2006-02-30
-func GetMonthEndDate() string {
+func (timeUtil TimeUtil) GetMonthEndDate() string {
 	now := time.Now()
 	now = now.AddDate(0, +1, -now.Day())
 	return now.Format(YearMonthDay) + EndTime
 }
 
 // GetYearStartDate 获取当前年开始日期 示例: 2006-02-12 => 2006-01-01
-func GetYearStartDate() string {
+func (timeUtil TimeUtil) GetYearStartDate() string {
 	now := time.Now()
 	return now.Format(Year) + "-01-01" + StartTime
 }
 
 // GetYearEndDate 获取当前年结束日期 示例: 2006-02-12 => 2006-12-31
-func GetYearEndDate() string {
+func (timeUtil TimeUtil) GetYearEndDate() string {
 	now := time.Now()
 	return now.Format(Year) + "-12-31" + EndTime
 }

@@ -2,6 +2,8 @@ package util
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 // RandomUtil 随机工具
@@ -42,7 +44,8 @@ func (r RandomUtil) RandomString(length int) string {
 
 // RandomRangeNum 获取指定返回的数字  输入 30 返回 0-29
 func (r RandomUtil) RandomRangeNum(max int) int {
-	return r.RandomRangeNumPlus(0, max)
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max)
 }
 
 // RandomRangeNumPlus 获取指定返回的数字  输入 10,30 返回 10-29

@@ -1,7 +1,3 @@
-/*
- * 作者：Lc
- */
-
 package test
 
 import (
@@ -10,7 +6,9 @@ import (
 )
 
 func TestToken(t *testing.T) {
-	token := util.GetToken("12345")
+	var TokenUtil = util.NewTokenUtil("asdfas@dafdsfa@dfa")
+
+	token := TokenUtil.DefaultToken("12345")
 	t.Log(token)
-	t.Log(util.GetTokenParse(token))
+	t.Log(TokenUtil.ParseToken(token))
 }

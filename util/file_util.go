@@ -1,7 +1,6 @@
 package util
 
 import (
-	"gitee.com/licheng1013/go-util/common"
 	"gitee.com/licheng1013/go-util/model"
 	"os"
 	"path/filepath"
@@ -12,6 +11,10 @@ var pathSeparator = string(os.PathSeparator)
 
 // FileUtil 文件工具类
 type FileUtil struct {
+}
+
+func NewFileUtil() *FileUtil {
+	return &FileUtil{}
 }
 
 // RedaFile 读取文件
@@ -104,7 +107,8 @@ func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 	//最终文件路径
 	var filePath = path + targetPath + fileName
 	//分块目录路径
-	blockPath := path + common.CryptoUtil.Md5Encode(fileName) + v.PathSeparator()
+	var cUtil CryptoUtil
+	blockPath := path + cUtil.Md5Encode(fileName) + v.PathSeparator()
 	_ = v.CreateDirectory(filePath)
 	file := v.OpenFile(filePath).File
 	files := v.ListFile(blockPath)
@@ -122,7 +126,8 @@ func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 		_ = os.Remove(v)
 	}
 	//解析10位时间戳并转换位当前日期对象
-	time := ParseTime(timestamp)
+	var timeUtil TimeUtil
+	time := timeUtil.ParseTime(timestamp)
 	_ = os.Chtimes(filePath, time, time)
 	defer file.Close()
 	_ = os.Remove(blockPath)

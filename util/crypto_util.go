@@ -13,6 +13,10 @@ import (
 type CryptoUtil struct {
 }
 
+func NewCryptoUtil() *CryptoUtil {
+	return &CryptoUtil{}
+}
+
 // Md5Encode md5编码只有加密
 func (c CryptoUtil) Md5Encode(v interface{}) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%v", v))))
