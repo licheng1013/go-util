@@ -1,86 +1,97 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
+	"gitee.com/licheng1013/go-util/model"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 var pathSeparator = string(os.PathSeparator)
 
-// FileReadByte 读取文件
-func FileReadByte(file *os.File) []byte {
-	var data []byte
-	var bytes = make([]byte, 1024*8)
-	for {
-		n, err := file.Read(bytes)
-		if err != nil {
-			panic(err)
-		}
-		if n == 0 {
-			break
-		}
-		// 将读取到的结果追加到data切片中
-		data = append(data, bytes[:n]...)
-	}
-	return bytes
+// FileUtil 文件工具类
+type FileUtil struct {
 }
 
-// Mkdir 创建目录,会排除/user/xx.txt ,则创建user目录 请使用： FileCreateDirectory
-// Deprecated
-func Mkdir(path string) {
-	FileCreateDirectory(path)
-}
-func FileCreateDirectory(path string) {
-	path = FileDirectoryPath(path)
-	//log.Println(path) //创建目录
-	err := os.Mkdir(path, 0750)
-	if os.IsExist(err) {
-		return
+// RedaFile 读取文件
+func (v FileUtil) RedaFile(path string) (string, error) {
+	absolute := v.GetAbsolute(path)
+	file, err := os.ReadFile(absolute)
+	if err != nil {
+		return "", err
 	}
+	return string(file), nil
+}
+
+// IsFile 是否是文件
+func (v FileUtil) IsFile(path string) (bool, error) {
+	info, err := v.IsDirectory(v.GetAbsolute(path))
+	if err != nil { // 如果出现错误
+		return false, err
+	}
+	return !info, err
+}
+
+// IsDirectory 是否是目录
+func (v FileUtil) IsDirectory(path string) (bool, error) {
+	info, err := os.Stat(v.GetAbsolute(path))
+	if err != nil {
+		return false, err
+	}
+	return info.IsDir(), nil
+}
+
+// IsAbsolute 是否绝对路径
+func (v FileUtil) IsAbsolute(path string) (string, error) {
+	abs, err := filepath.Abs(path)
+	return abs, err
+}
+
+// GetAbsolute 从当前目录获取绝对路径
+func (v FileUtil) GetAbsolute(path string) string {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		panic(err)
+	}
+	return abs
+}
+
+// OpenFile 打开文件,不存在则创建，以追加方式添加字符串
+func (v FileUtil) OpenFile(path string) *model.FileEdit {
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	return &model.FileEdit{File: file, Path: path, Name: v.GetFileName(path)}
+}
+
+// OpenNewFile 打开新文件,与 OpenFile 不同的是，是先删除后创建一个新文件在打开
+func (v FileUtil) OpenNewFile(path string) *model.FileEdit {
+	_ = v.DeleteFileOrDirectory(path)
+	return v.OpenFile(path)
+}
+
+// CreateDirectory 创建目录
+func (v FileUtil) CreateDirectory(path string) {
+	err := os.Mkdir(path, 0750)
 	if err != nil {
 		log.Println(err.Error())
 	}
 }
 
-// GetFilePath 返回一个目录格式 /user/xx.txt => /user/ 请使用：FileDirectoryPath
-// Deprecated
-func GetFilePath(path string) string {
-	return FileDirectoryPath(path)
-}
-
-// FileDirectoryPath 返回一个目录格式 /user/xx.txt => /user/
-func FileDirectoryPath(path string) string {
-	index := strings.LastIndex(path, FilePathSeparator())
-	if index == -1 {
-		panic("路径文件不对：" + path)
-	}
-	return path[:index]
-}
-
-// GetFilePathName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt 请使用 FilePathName
-// Deprecated
-func GetFilePathName(path string) string {
-	return FilePathName(path)
-}
-
-// FilePathName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt
-func FilePathName(path string) string {
-	index := strings.LastIndex(path, FilePathSeparator())
+// GetFileName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt
+func (v FileUtil) GetFileName(path string) string {
+	index := strings.LastIndex(path, v.PathSeparator())
 	if index == -1 {
 		return path
 	}
 	return path[index:]
 }
 
-func ListFile(path string) []FileInfo {
-	list := make([]FileInfo, 0)
+// ListFile 列出文件
+func (v FileUtil) ListFile(path string) []model.FileInfo {
+	list := make([]model.FileInfo, 0)
 	dir, err := os.ReadDir(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -89,9 +100,9 @@ func ListFile(path string) []FileInfo {
 		panic(err)
 	}
 	for _, item := range dir {
-		f := FileInfo{FileName: item.Name(), IsDirectory: 0}
+		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0}
 		if item.IsDir() {
-			f.FileName += FilePathSeparator()
+			f.FileName += v.PathSeparator()
 			f.IsDirectory = 1
 		}
 		list = append(list, f)
@@ -99,47 +110,35 @@ func ListFile(path string) []FileInfo {
 	return list
 }
 
-type FileInfo struct {
-	// 文件名
-	FileName string `from:"fileName" json:"fileName"`
-	// 1 是目录，0 默认文件
-	IsDirectory int8 `from:"isDirectory" json:"isDirectory"`
+// DeleteFileOrDirectory 删除文件或目录 -> 不包括子目录
+func (v FileUtil) DeleteFileOrDirectory(path string) error {
+	err := os.Remove(path)
+	return err
 }
 
-func CreateFile(path string) *os.File {
-	FileCreateDirectory(path)
-	file := OpenFile(path)
-	defer file.Close()
-	return file
-}
-
-// OpenFile open File
-func OpenFile(path string) *os.File {
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+// DeleteAllFileOrDirectory 删除文件或目录 -> 包括子目录
+func (v FileUtil) DeleteAllFileOrDirectory(path string) {
+	err := os.RemoveAll(path)
 	if err != nil {
 		panic(err)
 	}
-	return file
 }
 
-// ReadFile read File
-func ReadFile(path string) []byte {
-	file, err := os.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-	return file
+func (v FileUtil) CreateFile(path string) *os.File {
+	v.CreateDirectory(path)
+	file := v.OpenFile(path)
+	return file.File
 }
 
 // FileMerge 指定合并某个目录下的文件,合并文件
-func FileMerge(fileName, targetPath, timestamp, path string) {
+func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 	//最终文件路径
 	var filePath = path + targetPath + fileName
 	//分块目录路径
-	blockPath := path + Md5Encode(fileName) + FilePathSeparator()
-	FileCreateDirectory(filePath)
-	file := CreateFile(filePath)
-	files := ListFile(blockPath)
+	blockPath := path + Md5Encode(fileName) + v.PathSeparator()
+	v.CreateDirectory(filePath)
+	file := v.CreateFile(filePath)
+	files := v.ListFile(blockPath)
 	for _, info := range files {
 		var v = blockPath + info.FileName
 		//log.Println(v) 打印合并路径
@@ -160,13 +159,7 @@ func FileMerge(fileName, targetPath, timestamp, path string) {
 	_ = os.Remove(blockPath)
 }
 
-// GetPathSeparator 获取系统路径分割符号 linux = / or win =\\ 请使用 FilePathSeparator
-// Deprecated
-func GetPathSeparator() string {
-	return FilePathSeparator()
-}
-
-// FilePathSeparator 获取系统路径分割符号 linux = / or win =\\
-func FilePathSeparator() string {
+// PathSeparator 获取系统路径分割符号 linux = / or win =\\
+func (FileUtil) PathSeparator() string {
 	return pathSeparator
 }
