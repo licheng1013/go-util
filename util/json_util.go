@@ -22,15 +22,15 @@ func (JsonUtil) JsonToStr(v interface{}) string {
 	}
 }
 
-// JsonToObj Json转换成对象 => 传参需要带&号 示例=> (jsonStr,&user)
-func (JsonUtil) JsonToObj(jsonStr string, v interface{}) {
+// JsonToMap Json转换成对象 => 传参需要带&号 示例=> (jsonStr,&map)
+func (JsonUtil) JsonToMap(jsonStr string, v interface{}) {
 	if err := json.Unmarshal([]byte(jsonStr), v); err != nil {
 		panic(err)
 	}
 }
 
-// MapToObj map转换为结构体，需要注意的是，转换的字段必须大写开头
-func (JsonUtil) MapToObj(in interface{}, out interface{}) {
+// MapTosStruct map转换为结构体，需要注意的是，转换的字段必须大写开头
+func (JsonUtil) MapTosStruct(in interface{}, out interface{}) {
 	err := mapstructure.Decode(in, out)
 	if err != nil {
 		panic(err)
