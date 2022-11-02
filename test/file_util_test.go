@@ -10,7 +10,7 @@ import (
 )
 
 var filePath = "./test/test.txt"
-var fileDirectory = "test"
+var fileDirectory = "./test"
 
 func TestIsFile(t *testing.T) {
 	file, err := common.FileUtil.IsFile(filePath)
@@ -46,5 +46,28 @@ func TestRedaFile(t *testing.T) {
 }
 
 func TestOpenFile(t *testing.T) {
-	common.FileUtil.OpenFile(fileDirectory)
+	edit := common.FileUtil.OpenFile(filePath)
+	edit.WriteString("Hello")
+	edit.WriteStringLn("Hello")
+	edit.Close()
+}
+
+func TestOpenNewFile(t *testing.T) {
+	edit := common.FileUtil.OpenNewFile(filePath)
+	edit.WriteStringLn("Hello")
+	edit.WriteString("Hello")
+	edit.Close()
+}
+
+func TestCreateDirectory(t *testing.T) {
+	var testPath = fileDirectory + "/ok/test"
+	err := common.FileUtil.CreateDirectory(testPath)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func TestDeleteDirectory(t *testing.T) {
+	var testPath = fileDirectory + "/ok"
+	_ = common.FileUtil.DeleteAllFileOrDirectory(testPath)
 }

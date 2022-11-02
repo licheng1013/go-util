@@ -2,7 +2,6 @@ package util
 
 import (
 	"gitee.com/licheng1013/go-util/model"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,48 +65,16 @@ func (v FileUtil) OpenFile(path string) *model.FileEdit {
 	return &model.FileEdit{File: file, Path: path, Name: v.GetFileName(path)}
 }
 
-// OpenNewFile 打开新文件,与 OpenFile 不同的是，是先删除后创建一个新文件在打开
+// OpenNewFile 打开新文件,与 OpenFile 不同的是，是先尝试删除后创建一个新文件在打开
 func (v FileUtil) OpenNewFile(path string) *model.FileEdit {
 	_ = v.DeleteFileOrDirectory(path)
 	return v.OpenFile(path)
 }
 
-// CreateDirectory 创建目录
-func (v FileUtil) CreateDirectory(path string) {
-	err := os.Mkdir(path, 0750)
-	if err != nil {
-		log.Println(err.Error())
-	}
-}
-
-// GetFileName 返回一个文件名 /user/xx.txt => xx.txt or xx.txt => xx.txt
-func (v FileUtil) GetFileName(path string) string {
-	index := strings.LastIndex(path, v.PathSeparator())
-	if index == -1 {
-		return path
-	}
-	return path[index:]
-}
-
-// ListFile 列出文件
-func (v FileUtil) ListFile(path string) []model.FileInfo {
-	list := make([]model.FileInfo, 0)
-	dir, err := os.ReadDir(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			panic("目录不存在！")
-		}
-		panic(err)
-	}
-	for _, item := range dir {
-		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0}
-		if item.IsDir() {
-			f.FileName += v.PathSeparator()
-			f.IsDirectory = 1
-		}
-		list = append(list, f)
-	}
-	return list
+// CreateDirectory 创建目录 -> 支持子目录创建
+func (v FileUtil) CreateDirectory(path string) error {
+	err := os.MkdirAll(path, 0750)
+	return err
 }
 
 // DeleteFileOrDirectory 删除文件或目录 -> 不包括子目录
@@ -117,17 +84,18 @@ func (v FileUtil) DeleteFileOrDirectory(path string) error {
 }
 
 // DeleteAllFileOrDirectory 删除文件或目录 -> 包括子目录
-func (v FileUtil) DeleteAllFileOrDirectory(path string) {
+func (v FileUtil) DeleteAllFileOrDirectory(path string) error {
 	err := os.RemoveAll(path)
-	if err != nil {
-		panic(err)
-	}
+	return err
 }
 
-func (v FileUtil) CreateFile(path string) *os.File {
-	v.CreateDirectory(path)
-	file := v.OpenFile(path)
-	return file.File
+// GetFileName 截取路径返回一个文件名 /user/xx.txt -> xx.txt ,如果没有符合的直接返回改字符串
+func (v FileUtil) GetFileName(path string) string {
+	index := strings.LastIndex(path, v.PathSeparator())
+	if index == -1 {
+		return path
+	}
+	return path[index:]
 }
 
 // FileMerge 指定合并某个目录下的文件,合并文件
@@ -136,8 +104,8 @@ func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 	var filePath = path + targetPath + fileName
 	//分块目录路径
 	blockPath := path + Md5Encode(fileName) + v.PathSeparator()
-	v.CreateDirectory(filePath)
-	file := v.CreateFile(filePath)
+	_ = v.CreateDirectory(filePath)
+	file := v.OpenFile(filePath).File
 	files := v.ListFile(blockPath)
 	for _, info := range files {
 		var v = blockPath + info.FileName
@@ -162,4 +130,25 @@ func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 // PathSeparator 获取系统路径分割符号 linux = / or win =\\
 func (FileUtil) PathSeparator() string {
 	return pathSeparator
+}
+
+// ListFile 列出文件
+func (v FileUtil) ListFile(path string) []model.FileInfo {
+	list := make([]model.FileInfo, 0)
+	dir, err := os.ReadDir(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			panic("目录不存在！")
+		}
+		panic(err)
+	}
+	for _, item := range dir {
+		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0}
+		if item.IsDir() {
+			f.FileName += v.PathSeparator()
+			f.IsDirectory = 1
+		}
+		list = append(list, f)
+	}
+	return list
 }
