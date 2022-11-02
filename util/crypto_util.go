@@ -1,13 +1,7 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
-
 package util
 
 import (
+	"crypto/md5"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -15,8 +9,13 @@ import (
 	"fmt"
 )
 
-func init() {
-	//log.Println(md5Encode(123456))
+// CryptoUtil 加密解密工具类
+type CryptoUtil struct {
+}
+
+// Md5Encode md5编码只有加密
+func (c CryptoUtil) Md5Encode(v interface{}) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%v", v))))
 }
 
 // RsaEncode rsa使用公钥编码
@@ -55,7 +54,7 @@ type Rsa struct {
 }
 
 // RsaCreate 获取Rsa秘钥对象
-func RsaCreate() *Rsa {
+func (c CryptoUtil) RsaCreate() *Rsa {
 	rng := rand.Reader
 	generateKey, err := rsa.GenerateKey(rng, 2048)
 	if err != nil {

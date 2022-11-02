@@ -1,9 +1,3 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
@@ -12,8 +6,12 @@ import (
 	"strings"
 )
 
+// IpUtil 获取本机ip
+type IpUtil struct {
+}
+
 // GetIp 获取ip 192.168.16.100/24
-func GetIp() []string {
+func (v IpUtil) GetIp() []string {
 	var list []string
 	addr, err := net.InterfaceAddrs()
 	if err != nil {
@@ -25,11 +23,11 @@ func GetIp() []string {
 	return list
 }
 
-// GetTargetMaskIp 获取指定掩码位数的ip 8 16 24 32   分割/ 192.168.16.100/24 =>  192.168.16.100
-func GetTargetMaskIp(digit interface{}) []string {
+// GetTargetMaskIp 获取指定掩码位数的ip 8 16 24 32   分割 192.168.16.100/24 =>  192.168.16.100
+func (v IpUtil) GetTargetMaskIp(digit interface{}) []string {
 	digit = fmt.Sprintf("%v", digit)
 	var list []string
-	ip := GetIp()
+	ip := v.GetIp()
 	for _, item := range ip {
 		split := strings.Split(item, "/")
 		if split[1] == digit {

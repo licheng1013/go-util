@@ -1,22 +1,25 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 )
 
-var alphabetMap = alphabet()
-var alphabetMapLength = len(alphabetMap)
+// RandomUtil 随机工具
+type RandomUtil struct {
+	alphabetMap       string
+	alphabetMapLength int
+}
+
+// NewRandomUtil 构建对象
+func NewRandomUtil() *RandomUtil {
+	r := &RandomUtil{}
+	r.alphabetMap = r.alphabet()
+	r.alphabetMapLength = len(r.alphabetMap)
+	return r
+}
 
 // 字母表
-func alphabet() string {
+func (r RandomUtil) alphabet() string {
 	var str string
 	for i := 'a'; i <= 'z'; i++ {
 		str += fmt.Sprintf("%c", i)
@@ -28,35 +31,34 @@ func alphabet() string {
 }
 
 // RandomString 获取指定长度的随机字符串  输入 3 返回 xna
-func RandomString(length int) string {
+func (r RandomUtil) RandomString(length int) string {
 	var str string
 	for i := 0; i < length; i++ {
-		v := alphabetMap[RandomRangeNum(alphabetMapLength)]
+		v := r.alphabetMap[r.RandomRangeNum(r.alphabetMapLength)]
 		str += fmt.Sprintf("%c", v)
 	}
 	return str
 }
 
 // RandomRangeNum 获取指定返回的数字  输入 30 返回 0-29
-func RandomRangeNum(max int) int {
-	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(max)
+func (r RandomUtil) RandomRangeNum(max int) int {
+	return r.RandomRangeNumPlus(0, max)
 }
 
 // RandomRangeNumPlus 获取指定返回的数字  输入 10,30 返回 10-29
-func RandomRangeNumPlus(min, max int) int {
-	num := RandomRangeNum(max)
+func (r RandomUtil) RandomRangeNumPlus(min, max int) int {
+	num := r.RandomRangeNum(max)
 	if num <= min {
 		num += min
 	}
 	return num
 }
 
-// RandomNumber 获取指定长度的随机数字字符串  输入 5 返回 16523
-func RandomNumber(length int) string {
+// RandomNumber 获取指定长度的数字字符床
+func (r RandomUtil) RandomNumber(length int) string {
 	var strNumber string
 	for i := 0; i < length; i++ {
-		strNumber += fmt.Sprintf("%v", RandomRangeNum(10))
+		strNumber += fmt.Sprintf("%v", r.RandomRangeNum(10))
 	}
 	return strNumber
 }

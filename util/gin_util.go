@@ -1,9 +1,3 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
@@ -12,56 +6,42 @@ import (
 	"strings"
 )
 
-var GinUtil = context.Background()
-
-const GinUtilKey = "GinUtilKey"
-
-// GetUrlPath 不带参数的  /user/test?name=xx => /user/test 请使用： GinUrlPath
-// Deprecated
-func GetUrlPath() string {
-	return GinUrlPath()
+// GinUtil 对gin框架进行的简易封装
+type GinUtil struct {
+	ctx context.Context
+	ket string
 }
 
-// GinUrlPath 不带参数的  /user/test?name=xx => /user/test
-func GinUrlPath() string {
-	split := strings.Split(GinParamsUrlPah(), "?")
-	path := split[0]
-	return path
+func NewGinUtil() *GinUtil {
+	return &GinUtil{ket: "ginUtilKey", ctx: context.Background()}
 }
 
-// GetParamsUrlPah 带参数的  /user/test?name=xx 请使用： GinParamsUrlPah
-// Deprecated
-func GetParamsUrlPah() string {
-	return GinParamsUrlPah()
+// GetUrlPath 获取不带参数的路径  /a/b?name=xx -> /a/b
+func (v GinUtil) GetUrlPath() string {
+	uri := v.GetRequestURI()
+	split := strings.Split(v.GetRequestURI(), "?")
+	if len(split) >= 1 {
+		return split[0]
+	}
+	return uri
 }
 
-// GinParamsUrlPah 带参数的  /user/test?name=xx
-func GinParamsUrlPah() string {
-	c := GinGetContext()
+// GetRequestURI 获取请求路径
+func (v GinUtil) GetRequestURI() string {
+	c := v.GetContext()
 	return c.Request.RequestURI
 }
 
-// GetGinContext 获取 GinContext 上下文 请使用： GinGetContext
-// Deprecated
-func GetGinContext() *gin.Context {
-	return GinGetContext()
-}
-
-func GinGetContext() *gin.Context {
-	value := GinUtil.Value(GinUtilKey)
+// GetContext 获取 gin 上下文
+func (v GinUtil) GetContext() *gin.Context {
+	value := v.ctx.Value(v.ket)
 	if value == nil {
 		panic("没有在gin环境注册！")
 	}
 	return value.(*gin.Context)
 }
 
-// SetGinContext 设置 GinContext 上下文  请使用： GinSetContext
-// Deprecated
-func SetGinContext(c *gin.Context) {
-	GinSetContext(c)
-}
-
-// GinSetContext 设置 GinContext 上下文
-func GinSetContext(c *gin.Context) {
-	GinUtil = context.WithValue(GinUtil, GinUtilKey, c)
+// SetContext 设置 gin 上下文
+func (v GinUtil) SetContext(c *gin.Context) {
+	v.ctx = context.WithValue(v.ctx, v.ket, c)
 }
