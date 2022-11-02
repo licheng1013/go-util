@@ -1,6 +1,7 @@
 package util
 
 import (
+	"gitee.com/licheng1013/go-util/common"
 	"gitee.com/licheng1013/go-util/model"
 	"os"
 	"path/filepath"
@@ -103,7 +104,7 @@ func (v FileUtil) FileMerge(fileName, targetPath, timestamp, path string) {
 	//最终文件路径
 	var filePath = path + targetPath + fileName
 	//分块目录路径
-	blockPath := path + Md5Encode(fileName) + v.PathSeparator()
+	blockPath := path + common.CryptoUtil.Md5Encode(fileName) + v.PathSeparator()
 	_ = v.CreateDirectory(filePath)
 	file := v.OpenFile(filePath).File
 	files := v.ListFile(blockPath)
