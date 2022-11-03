@@ -57,7 +57,7 @@ func (r RandomUtil) RandomRangeNumPlus(min, max int) int {
 	return num
 }
 
-// RandomNumber 获取指定长度的数字字符床
+// RandomNumber 获取指定长度的数字字符串
 func (r RandomUtil) RandomNumber(length int) string {
 	var strNumber string
 	for i := 0; i < length; i++ {
