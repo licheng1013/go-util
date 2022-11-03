@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 // FileInfo 文件信息封装
 type FileInfo struct {
 	// 文件名
@@ -11,5 +9,5 @@ type FileInfo struct {
 	// 文件绝对路径
 	FilePath string `json:"filePath"`
 	// 修改时间
-	UpdatedAt time.Time
+	UpdatedAt string `json:"updatedAt"`
 }

@@ -153,7 +153,7 @@ func (v FileUtil) ListFileAndFolder(path string) []model.FileInfo {
 	for _, item := range dir {
 		info, _ := item.Info()
 		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0,
-			FilePath: path + separator + item.Name(), UpdatedAt: info.ModTime()}
+			FilePath: path + separator + item.Name(), UpdatedAt: info.ModTime().Format("2006-01-02 15:04:05")}
 
 		if item.IsDir() {
 			f.FilePath += separator
