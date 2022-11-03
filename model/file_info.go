@@ -6,4 +6,6 @@ type FileInfo struct {
 	FileName string `from:"fileName" json:"fileName"`
 	// 1 是目录，0 默认文件
 	IsDirectory int8 `from:"isDirectory" json:"isDirectory"`
+	// 文件绝对路径
+	FilePath string `json:"filePath"`
 }

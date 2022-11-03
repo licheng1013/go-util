@@ -68,3 +68,9 @@ func TestDeleteDirectory(t *testing.T) {
 	var testPath = fileDirectory + "/ok"
 	_ = common.FileUtil.DeleteAllFileOrDirectory(testPath)
 }
+
+func TestListFile(t *testing.T) {
+	var testPath = fileDirectory
+	v := common.FileUtil.ListFile(testPath)
+	log.Println(v)
+}

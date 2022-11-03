@@ -138,8 +138,10 @@ func (FileUtil) PathSeparator() string {
 	return pathSeparator
 }
 
-// ListFile 列出文件
+// ListFile 列出文件 - 不包括子目录的返回 - 如果有错误会直接抛出
 func (v FileUtil) ListFile(path string) []model.FileInfo {
+	path = v.GetAbsolute(path)
+	separator := v.PathSeparator()
 	list := make([]model.FileInfo, 0)
 	dir, err := os.ReadDir(path)
 	if err != nil {
@@ -149,9 +151,9 @@ func (v FileUtil) ListFile(path string) []model.FileInfo {
 		panic(err)
 	}
 	for _, item := range dir {
-		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0}
+		f := model.FileInfo{FileName: item.Name(), IsDirectory: 0, FilePath: path + separator + item.Name()}
 		if item.IsDir() {
-			f.FileName += v.PathSeparator()
+			f.FilePath += separator
 			f.IsDirectory = 1
 		}
 		list = append(list, f)
