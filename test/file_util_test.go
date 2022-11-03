@@ -71,6 +71,18 @@ func TestDeleteDirectory(t *testing.T) {
 
 func TestListFile(t *testing.T) {
 	var testPath = fileDirectory
-	v := common.FileUtil.ListFile(testPath)
+	v := common.FileUtil.ListFileAndFolder(testPath)
+	log.Println(v)
+}
+
+func TestListAllFileAndFolder(t *testing.T) {
+	var testPath = fileDirectory
+	v := common.FileUtil.ListAllFileAndFolder(testPath)
+	log.Println(v)
+}
+
+func TestListAllFile(t *testing.T) {
+	var testPath = fileDirectory
+	v := common.FileUtil.ListAllFile(testPath)
 	log.Println(v)
 }
