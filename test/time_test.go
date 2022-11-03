@@ -1,12 +1,12 @@
 package test
 
 import (
-	"gitee.com/licheng1013/go-util/util"
+	"gitee.com/licheng1013/go-util/common"
 	"testing"
 )
 
 func TestTime(t *testing.T) {
-	var u = util.TimeUtil{}
+	var u = common.TimeUtil
 	t.Log("解析时间")
 	t.Log(u.ParseTimeStr("1660105962"))
 
