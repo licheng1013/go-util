@@ -64,3 +64,7 @@ replace gitee.com/licheng1013/go-util => gitee.com/licheng1013/go-util tag最新
 ### Url(编码)
 - 编码
 - 解码
+
+### Http(请求)
+- get请求
+- 文件下载
