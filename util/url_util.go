@@ -1,22 +1,24 @@
-/*
- *                                  Apache License
- *                            Version 2.0, January 2004
- *                         http://www.apache.org/licenses/
- */
-
 package util
 
 import (
 	"net/url"
 )
 
+// UrlUtil url编码工具
+type UrlUtil struct {
+}
+
+func NewUrlUtil() *UrlUtil {
+	return &UrlUtil{}
+}
+
 // URLEncode 编码网址
-func URLEncode(str string) string {
+func (UrlUtil) URLEncode(str string) string {
 	return url.QueryEscape(str)
 }
 
 // URLDecode 解码网址
-func URLDecode(str string) string {
+func (UrlUtil) URLDecode(str string) string {
 	s, err := url.QueryUnescape(str)
 	if err != nil {
 		panic(err)

@@ -2,6 +2,7 @@ package util
 
 import (
 	"gitee.com/licheng1013/go-util/model"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -188,4 +189,16 @@ func (v FileUtil) ListAllFile(path string) []model.FileInfo {
 		}
 	}
 	return list
+}
+
+// WriteFile 根据流写入文件
+func (v FileUtil) WriteFile(file io.Reader, path string) error {
+	all, err := io.ReadAll(file)
+	if err != nil {
+		return err
+	}
+	edit := v.OpenNewFile(path)
+	edit.WriteByte(all)
+	edit.Close()
+	return nil
 }
