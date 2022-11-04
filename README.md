@@ -2,6 +2,25 @@
 ## 介绍
 - 2022/8/8
 - 一个简单的go-util工具库,正在努力优化中
+- 欢迎参与贡献
+- 采用对象式调用工具类
+- 目前已开发的工具类
+
+
+```goland
+var FileUtil = util.NewFileUtil()
+var IpUtil = util.NewIpUtil()
+var GinUitl = util.NewGinUtil()
+var RandomUtil = util.NewRandomUtil()
+var CryptoUtil = util.NewCryptoUtil()
+var TimeUtil = util.NewTimeUtil()
+var JsonUtil = util.NewJsonUtil()
+var TaskUtil = util.NewTaskUtil()
+var SortUtil = util.NewSortUtil()
+var UrlUtil = util.NewUrlUtil()
+var HttpUtil = util.NewHttpUtil()
+```
+
 ## 安装教程
 - Gitee安装
 - 以下是配置格式
@@ -68,3 +87,7 @@ replace gitee.com/licheng1013/go-util => gitee.com/licheng1013/go-util tag最新
 ### Http(请求)
 - get请求
 - 文件下载
+
+### Sort(排序)
+- 字符串字典排序
+- 数字从低到高排序
