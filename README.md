@@ -59,3 +59,8 @@ replace gitee.com/licheng1013/go-util => gitee.com/licheng1013/go-util tag最新
 - RSA密钥生成
 - RSA加密
 - RSA解密
+
+
+### Url(编码)
+- 编码
+- 解码
