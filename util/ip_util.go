@@ -27,6 +27,17 @@ func (v IpUtil) GetIp() []string {
 	return list
 }
 
+func (v IpUtil) GetLocalIpv4()  {
+	//ip := v.GetTargetMaskIp(24)
+	//for v := range ip {
+	//	ipv4 := ip[v]
+	//	split := strings.Split(ipv4, ".")
+	//}
+	//return list
+}
+
+
+
 // GetTargetMaskIp 获取指定掩码位数的ip 8 16 24 32   分割 192.168.16.100/24 =>  192.168.16.100
 func (v IpUtil) GetTargetMaskIp(digit interface{}) []string {
 	digit = fmt.Sprintf("%v", digit)
