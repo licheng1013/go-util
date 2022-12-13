@@ -13,4 +13,6 @@ func TestIp(t *testing.T) {
 	for _, maskIp := range maskIps {
 		t.Log("http://" + maskIp)
 	}
+
+	t.Log(common.IpUtil.GetLocalIpv4())
 }
