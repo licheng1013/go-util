@@ -1,4 +1,4 @@
-module gitee.com/licheng1013/go-util
+module go-util
 
 go 1.18
 
