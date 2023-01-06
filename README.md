@@ -22,14 +22,10 @@ var HttpUtil = util.NewHttpUtil()
 ```
 
 ## 安装教程
-- Gitee安装
+- Github安装
 - 以下是配置格式
 ```text
-require (
-	gitee.com/licheng1013/go-util v0.1.4
-)
-
-replace gitee.com/licheng1013/go-util => gitee.com/licheng1013/go-util tag最新版
+go get github.com/licheng1013/go-util
 ```
 ### 测试
 -  go test .\test\
