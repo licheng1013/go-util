@@ -1,6 +1,6 @@
 package common
 
-import "gitee.com/licheng1013/go-util/util"
+import "github.com/licheng1013/go-util/util"
 
 var FileUtil = util.NewFileUtil()
 var IpUtil = util.NewIpUtil()
